@@ -1,8 +1,8 @@
 import { Routes, Route } from "react-router-dom";
 import Navbar from "./Components/Navbar";
 import Home from "./Pages/Home";
-import ProductDetails from "./pages/ProductDetails";
-import Cart from "./pages/Cart";
+import ProductDetails from "./Pages/ProductDetails";
+import Cart from "./Pages/Cart";
 
 export default function App() {
   return (
