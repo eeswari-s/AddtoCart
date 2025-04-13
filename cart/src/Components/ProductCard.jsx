@@ -1,26 +1,26 @@
-import { useCart } from "../context/CartContext";
 import { Link } from "react-router-dom";
+import { useContext, useState } from "react";
+import { CartContext } from "../context/CartContext";
 
-const ProductCard = ({ product }) => {
-  const { cartItems, addToCart } = useCart();
-
-  const inCart = cartItems.find((item) => item.id === product.id);
+export default function ProductCard({ item }) {
+  const { addToCart, cartItems } = useContext(CartContext);
+  const alreadyAdded = cartItems.some(p => p.id === item.id);
 
   return (
-    <div className="border shadow-md rounded-lg p-4">
-      <Link to={`/product/${product.id}`}>
-        <img src={product.image} alt={product.title} className="h-40 w-full object-contain" />
-        <h3 className="text-lg font-semibold mt-2">{product.title}</h3>
-        <p className="text-green-700 font-bold">₹ {product.price}</p>
+    <div className="border rounded-xl p-4 shadow hover:shadow-xl transition-all flex flex-col justify-between">
+      <Link to={`/product/${item.id}`}>
+        <img src={item.image} alt={item.title} className="h-40 object-contain mx-auto" />
+        <h2 className="mt-2 font-semibold">{item.title}</h2>
+        <p className="text-lg font-bold text-green-600">${item.price}</p>
       </Link>
       <button
-        onClick={() => addToCart(product)}
-        className="mt-2 bg-blue-500 text-white px-4 py-1 rounded hover:bg-green-500"
+        onClick={() => !alreadyAdded && addToCart(item)}
+        className={`mt-4 p-2 rounded-md font-medium transition ${
+          alreadyAdded ? "bg-green-600 text-white" : "bg-blue-500 hover:bg-blue-600 text-white"
+        }`}
       >
-        {inCart ? "Already Added" : "Add to Cart"}
+        {alreadyAdded ? "Added to Cart" : "Add to Cart"}
       </button>
     </div>
   );
-};
-
-export default ProductCard;
+}

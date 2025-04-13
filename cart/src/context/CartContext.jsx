@@ -1,22 +1,19 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useState } from "react";
 
-const CartContext = createContext();
+export const CartContext = createContext();
 
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
 
-  const addToCart = (product) => {
-    const already = cartItems.find((item) => item.id === product.id);
-    if (already) {
-      alert("Already added to cart!");
-      return;
-    }
-    setCartItems([...cartItems, { ...product, quantity: 1 }]);
+  const addToCart = (item) => {
+    const already = cartItems.find((product) => product.id === item.id);
+    if (already) return alert("Already added!");
+
+    setCartItems([...cartItems, item]);
   };
 
   const removeFromCart = (id) => {
-    const updated = cartItems.filter((item) => item.id !== id);
-    setCartItems(updated);
+    setCartItems(cartItems.filter((item) => item.id !== id));
   };
 
   return (
@@ -25,5 +22,3 @@ export const CartProvider = ({ children }) => {
     </CartContext.Provider>
   );
 };
-
-export const useCart = () => useContext(CartContext);

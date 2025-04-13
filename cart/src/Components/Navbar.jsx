@@ -1,25 +1,26 @@
 import { Link } from "react-router-dom";
-import { useCart } from "../context/CartContext";
-import { useState } from "react";
-import CartPopup from "./CartPopup.jsx";
+import { useContext } from "react";
+import { CartContext } from "../context/CartContext";
 
 const Navbar = () => {
-  const { cartItems } = useCart();
-  const [showCart, setShowCart] = useState(false);
+  const { cartItems } = useContext(CartContext);
 
   return (
-    <nav className="bg-blue-600 text-white p-4 flex justify-between items-center relative">
-      <Link to="/" className="text-xl italic font-bold">FakeStore</Link>
-      <div>
-        <Link to="/" className="mr-4">Products</Link>
-        <button className="relative" onClick={() => setShowCart(!showCart)}>
-          Cart
-          <span className="absolute -top-2 -right-3 bg-red-500 rounded-full px-2 text-xs">
-            {cartItems.length}
-          </span>
-        </button>
+    <nav className="bg-blue-600 text-white flex justify-between items-center px-6 py-4 shadow-md">
+      <Link to="/" className="text-xl font-bold italic">
+        Fake Store
+      </Link>
+      <div className="flex gap-4 items-center">
+        <Link to="/" className="hover:text-green-300">Products</Link>
+        <Link to="/cart" className="relative hover:text-green-300">
+          🛒 Cart
+          {cartItems.length > 0 && (
+            <span className="bg-red-500 text-xs text-white rounded-full px-2 py-0.5 absolute -top-2 -right-3 animate-bounce">
+              {cartItems.length}
+            </span>
+          )}
+        </Link>
       </div>
-      <CartPopup isOpen={showCart} onClose={() => setShowCart(false)} />
     </nav>
   );
 };

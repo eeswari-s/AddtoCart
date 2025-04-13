@@ -1,30 +1,35 @@
-// src/pages/Cart.jsx
-import { useCart } from "../context/CartContext";
-import CartItem from "../Components/CartItem";
+import { useContext } from "react";
+import { CartContext } from "../context/CartContext";
 
 export default function Cart() {
-  const { cart } = useCart();
+  const { cartItems, removeFromCart } = useContext(CartContext);
 
-  const totalPrice = cart.reduce((acc, item) => acc + item.price * item.quantity, 0);
-  const discount = totalPrice * 0.1;
-  const finalPrice = totalPrice - discount;
+  const total = cartItems.reduce((sum, item) => sum + item.price, 0).toFixed(2);
 
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">🛒 Your Cart</h2>
-      {cart.length === 0 ? (
-        <p>Your cart is empty.</p>
+      <h1 className="text-2xl font-bold mb-4">Cart Items</h1>
+      {cartItems.length === 0 ? (
+        <p>No items in cart</p>
       ) : (
-        <>
-          {cart.map((item) => (
-            <CartItem key={item.id} item={item} />
+        <div className="space-y-4">
+          {cartItems.map((item) => (
+            <div key={item.id} className="flex items-center justify-between border p-4 rounded-lg shadow">
+              <img src={item.image} className="w-16 h-16 object-contain" />
+              <p className="w-1/3">{item.title}</p>
+              <p>${item.price}</p>
+              <button
+                onClick={() => removeFromCart(item.id)}
+                className="px-3 py-1 bg-red-500 hover:bg-red-700 text-white rounded"
+              >
+                Remove
+              </button>
+            </div>
           ))}
-          <div className="text-right mt-4">
-            <p>Total: ₹ {totalPrice.toFixed(2)}</p>
-            <p>Discount (10%): ₹ {discount.toFixed(2)}</p>
-            <p className="text-xl font-bold">Final Price: ₹ {finalPrice.toFixed(2)}</p>
+          <div className="text-xl font-semibold text-right mt-4">
+            Total: ${total}
           </div>
-        </>
+        </div>
       )}
     </div>
   );
